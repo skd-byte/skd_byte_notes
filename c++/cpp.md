@@ -169,3 +169,144 @@ complex<double>z3 = {d1, d2} // the = is optional with {...}
         ```
 
 ## User Defined Types
+
+### Introduction
+- The C++ abstraction mechanism are primarily designed to let programmers design and imp[lement their own type.
+- ***User-defined types (classes and enumeration)*** are less error prone and easy to use than built-in types
+- structure 
+    ```c++
+    struct Vector
+    {
+        int sz;
+        double *elem;
+    };
+
+
+    void vector(Vector& v, int s)
+    {
+        v.elem = new double[s];
+        v.sz =  s;
+    }
+
+    void f(Vector v, kVector& rv, Vector* pv)
+    {
+        int i1 = vsz;    // access through name
+        int i2 = rv.sz;  // access through reference
+        int i3 = pv->sz; //access through the pointer
+    }
+    ```
+### Classes
+- A tighter connection between the representation and the operation is needed for a user-defined type to have all the properties expected of a **real-type**. To do that we have to distinguish between the interface to a type (to be used by all) and its implementation (which has access to the otherwise inaccssible data). The language mechnaism of for that is called a class.
+- The interface defined by public member of the class and private member only accessible only through that interface.
+```c++
+class Vector {
+public:
+    Vector(int s):elem{new double[s]},sz{s}{} //contruct a vector
+    double& operator[](int i){return elem[i];} //element access: subscripting
+    int size(){return sz;}
+private:
+    doouble* elem; // pointer the elemennts 
+    int sz // the number of elements
+}
+
+double read_and_sum(int s)
+{
+    Vector v(6);
+    for(int i=0; i<v.size(); ++i)
+        cin >>v[i];
+    
+    double sum = 0;
+    for(int i=0; i<v.size(); ++i)
+        sum +=v[i];
+
+    return sum;
+}
+```
+
+### Unions
+- Occupies only as much space as its largest element
+
+```c++
+struct Entry{
+    str name;
+    Type t;
+    Node* p; // use p if t==ptr
+    int i;   // use i if t==num
+}
+
+union Value{
+    Node* p;
+    int i;
+};
+
+struct Entry{
+    str name;
+    Type t;
+    Value v;
+}
+```
+> **Note:** shoul not use naked union, alway use with type or call it tagged union
+
+- **varaint**, standard library type can eliminate most direct use of unions, ` variant<Node*, int>, holds_alternative<int>(pe->v),get<int>`
+
+```c++
+struct Entry{
+    string name;
+    variant<Node*, int> v;
+}
+
+void f(Entry *pe)
+{
+    if(holds_alternative<int>(pe->v))
+        cout << get<int>(pe->v);
+}
+```
+
+### Enumerations
+```c++
+enum class Color {red, blue, green};
+enum class traffic_light{green, yellow, red};
+Color x = red; //error: which red?
+Color y = Traffic_light::red; //error:that red is not a Color
+Color z = Color::red; //ok
+
+int i = Color:: red //error: Color::red is not an int
+Color c = 2 //initialization error:2 is not a color
+```
+> ***Note:*** enum - allow implicit conversion, enum class not allow implicit conversion - only explixit conversion allowed, means class after enum specifies that an enumeration is *strongly typed*. Also using enum class also specifies thier scope, menas being separate types
+
+```c++
+Color x = Color{5}; // ok, but verbose
+Color y{6}; //also ok
+```
+- By default **enum class** has only assignment, intialization and comparison defined. However an enumeartion is user defined type, so we can define operator for it:
+
+```c++
+Traaffic_light& operator++(Traffic_light& t)
+{
+    switch(t){
+        case Traffic_loght::green: return t=Traffic_light::yellow;
+        case Traffic_light::yellow return t=Traffic_light::red;
+        case Traffic_light::red return t=Traffic_light::green;
+    }
+}
+
+Traffic_light next = ++light; // next becomes Traffic_light::green
+```
+
+- dont want to explicitly qualify enmuerator names and want enumerator values to be ints (without need for an expliti conversion) remove the **class** from enum.
+```c++
+enum Color {red, green, blue};
+int col =  green; // col get 1
+```
+
+### Advice
+- Organize related data into structures
+- Prefer enum class over plain enum
+- Avoid naked unions
+- define contructors to gurantee and simplyfy the intitialization of class
+- Define operation on enumerations for safe and simple use
+
+## Modularity
+
+### Introduction
