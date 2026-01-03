@@ -119,6 +119,8 @@
     Link<Record>*Ist = nullptr; // pointer to a link to a Record 
     int x = nullptr; //error:nullptr id a ponter not an integer
     ```
+- reference cannot be made to refer to a different object after its initialization.
+- There is no “null reference.” A reference must refer to a valid object (and implementations assume that it does). There are obscure and clever ways to violate that rule; don’t do that.
 
 ### Tests
 
