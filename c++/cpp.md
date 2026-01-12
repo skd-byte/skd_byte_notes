@@ -39,8 +39,8 @@
     ```
 - {} this saves you from conversion that losse information
     - ex, int i1 = 7.8 // i becomes 7 (surprise?)
+        - unfortunately, conveersion that loose information, ***narrowing conversions***, such as double to int and int to char are allowed and implitcly applied.
     - ex, int i2{7.8} // error: floating-point to iteger conversion 
-    - unfortunately, conveersion that loose information, ***narrowing conversions***, such as double to int and int to char are allowed and implitcly applied.
 - Don"t need to state its type explicitly when it can be deduced from the initializer
     - auto b = true; // a bool
     - auto ch = 'x'; // a char
@@ -72,7 +72,7 @@
             ```
             constexpr double square(double x){return x*x;}
             constexpr double max1 = 1.4*square(17);// ok, evaluated at compiletime
-            constexpr double max1 = 1.4*square(17);// error: var is not a constant expression
+            constexpr double max2 = 1.4*square(var);// error: var is not a constant expression
             const double max3 =1.4*square(var);// ok, may be evaluated at runtime
             ```
         - contexpr function can be used for non constant argument, so we can use the same funcntion for constexpr and for variables, without defining two.
@@ -83,12 +83,12 @@
 
 - Pointers and Array
     - In declaration
-        - [] means: **array of**
-        - * menas:  **pointer to**
-        - & means   **refernce to**
+        - `[]` means: **array of**
+        - `*` menas:  **pointer to**
+        - `&` means   **refernce to**
     - In expression
-        - * means: **contents of**
-        - & means: **address of**
+        - `*` means: **contents of**
+        - `&` means: **address of**
 - C++ rang-for statement, for loops that traverse a sequence in the simplest way
     ```c++
     void print()
@@ -143,6 +143,7 @@
 - Assignments
     - An assignment of built-in type is a simple machine copy operation, 'int x =2; int y=3', both are independent object
     - Assignement to a refernce, does not change what the reference refers to but assigns to the referenced object
+    - Assignment replaces the value of an already initialized object.
         ```c++
         int x = 2;
         int y = 3;
@@ -187,13 +188,13 @@
 
     void vector(Vector& v, int s)
     {
-        v.elem = new double[s];
+        v.elem = new double[s]; // allocate an array of s doubles
         v.sz =  s;
     }
 
-    void f(Vector v, kVector& rv, Vector* pv)
+    void f(Vector v, Vector& rv, Vector* pv)
     {
-        int i1 = vsz;    // access through name
+        int i1 = v.sz;    // access through name
         int i2 = rv.sz;  // access through reference
         int i3 = pv->sz; //access through the pointer
     }
@@ -318,7 +319,7 @@
 - A ***declaration*** specifies all that's need to use a function or a type. `double sqrt(double);`
 
 ### Separate compilation
-- A .cpp file that is compiled by i self is called a **translation unit**.
+- A .cpp file that is compiled by itself is called a **translation unit**.
 
     ```plantuml
     @startuml
@@ -438,7 +439,7 @@
     }
     ```
 
- - The **throw** trnasfer control to a handler for exception of type **out_of_rnage** in some function that directly or indirectly called **Vector::operator[]()**. To do that, the implementation will unwind the function call stack as needed to get back to the context of that caller, functions as needed to get back to caller that has expressed interest in handling that kind of exception, invoking destructors along the was as needed.
+ - The **throw** trnasfer control to a handler for exception of type **out_of_rnage** in some function that directly or indirectly called **Vector::operator[]()**. To do that, the implementation will unwind the function call stack as needed to get back to the context of that caller, functions as needed to get back to caller that has expressed interest in handling that kind of exception, invoking destructors along the way as needed.
 
     ```c++
     void f(Vector&v)
@@ -519,7 +520,6 @@
 
     void process_file_raii(const std::string& filename) {
         // The resource is acquired in the constructor
-        // If the file can't be opened, the constructor throws an exception
         std::fstream file(filename);
 
         if (!file) {
@@ -715,3 +715,98 @@
 - Let a constructor establish an invariant, and throw if it cannot
 
 ## Classes
+
+### Introduction
+
+### Concrete Class
+- its representation is part of its definition, such as **vector** class, to increase flexibility a concrete tpe can keep major parts of its representation on the free store (dynamic memory, heap) and access them through the part stored in the class object itself. That's the way *vector* and *string* are immplemented. resources handles with interfaces.
+- class contains operation requiring access to the representation
+
+    > **Function defined in a class are inlined by default**
+- const specifier on the functions indicate that these function do not modify the object for which they are called.
+- const member function can be invojed for both const and non const objects, but for non const fuction can only be invoked for non const objects.
+    ```c++
+    double real() const {return re;}
+
+    complex z = {1,0};
+    const complex cz {3,4};
+    z = cz; // OK:assigning to a non const variable
+    cz = z; // error:complex::operator=() is a non consta member function
+    double x = z.real(); // ok: complex::real() is a const member function
+    ```
+- operations does not require direct access to the representation they can be defined separately from the class definition
+    ```c++
+    complex operator+(complex a, complex b){return a+=b;}
+    ```
+- The compiler converts operators operation into appropriate function calls.
+
+    ```c++
+    c!=b means operator!=(c,b);
+    1/a means operator/(complex{1},a)
+    ```
+
+- operator chaining , Assignment (=) T&, Stream (<<, >>) ostream& / istream&, Prefix ++ T&, Postfix ++, T, Arithmetic (+, -), T (usually)
+    ```c++
+    ostream& operator<<(ostream& os, const MyClass& obj) {
+    os << obj.value;
+    return os;   // 🔑 key
+    }
+    ```
+    > user define operators use cautiously, syntax is fixed by language so you can't define a unary /.
+
+    > Plain **delete** deletes and individual object, **delete[]** deletes an array.
+
+- RAII - Resource Acquisition Is Iintialization - avoid naked new and delete and burried them iinside well - behaved abstractions
+- A ***handle to a data model*** is an indirect reference that lets you access or control the data without owning or exposing it directly.
+    ```c++
+    Model m{10};
+    Model& handle = m;   // handle
+    handle.value = 20;
+    ```
+
+#### intializing containers
+
+- best way to intialize
+    - ***Initializer-list constructor***: Initialize with list of elements
+    - ***push_back***: Add a new element at the end of the sequence
+
+    ```c++
+    class Vector {
+    public:
+        Vector(std:initializer_list<double>); // initialize with a list of doubles
+        //...
+        void push_back(double); // add element at end, increase the size by one
+    }
+    ```
+
+ - ***std::intializer_list*** define a intializer-list constructor is a std lib type known to the compiler: when we use a {}-list, such as {1,2,3,4} compiler will create an object of type initializer_list to give to the program, ex `Vector v = {1,2,3,4}`
+
+ - A static_cast does not check the value it is converting; the programmer is trusted to use it correctly. 
+ - Other casts are reinterpret_cast and bit_cast (§16.7) for treating an object as simply a sequence of bytes and const_cast for “casting away const.” 
+
+### Abstract Types
+- an abstract type is a type that completely insulates a user from its implementation. to do that decouple the interface from its representation and give up the genuine local variables
+- an abstract class can have methods with definitions
+
+    ```c++
+    class Container {
+    public:
+        virtual double& operator[](int) = 0;     // pure virtual function
+        virtual int size() const = 0;            // const member function (§5.2.1)
+        virtual ~Container() {}                  // destructor (§5.2.2)
+    };
+    ```
+- there cannot be object of abstract class
+- a class with a pure virtual function is called an ***abstract class***, an class provide the interface to other class is often called ***polymorphic type***
+- abstract class does not have constructor as it does not have data to initialize
+- Objects are usually handled via base-class pointers 
+- that is common for abstract classes because they tend to be manipulated through references or pointers, and someone destroying a Container through a pointer has no idea what resources are owned by its implementation
+- A virtual destructor is essential for an abstract class because an object of a derived class is usually manipulated through the interface provided by its abstract base class. In particular, it may be deleted through a pointer to a base class. Then, the virtual function call mechanism ensures that the proper destructor is called. That destructor then implicitly invokes the destructors of its bases and members.
+- use of **override** is optional, but being explicit allows the catch mistake like typo in function name 
+
+    > ***NOTE:*** members objects are constructed in the order they are declared in the class definition not the order they apperar in the constructor member initializer list
+
+### Virtual Functions
+- The compiler to convert the name of a virtual function into an index into a table of pointers to functions.
+-  Each class with virtual functions has its own vtbl identifying its virtual functions.
+- Its space overhead is one pointer in each object of a class with virtual functions plus one vtbl for each such class. - vptr location, vtable index
