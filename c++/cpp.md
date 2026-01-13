@@ -46,6 +46,9 @@
     - auto ch = 'x'; // a char
     - use in generic programming where the long type names and the exact type of an object can be hard for programmer to know
 
+> Parentheses () call the most specific matching constructor and allow implicit conversions, but they can be mistaken for function declarations.
+> Braces {} provide "Uniform Initialization" that prevents data loss and solves ambiguity, but they will always prioritize an initializer_list constructor if one is available.
+
 ### Scope and Initialization
 - Scope
     - Local Scope - Declared in a function or lambda is called a local name.
@@ -796,10 +799,9 @@
         virtual ~Container() {}                  // destructor (§5.2.2)
     };
     ```
-- there cannot be object of abstract class
+- there cannot be object of abstract class measn it cannot be instantiate
 - a class with a pure virtual function is called an ***abstract class***, an class provide the interface to other class is often called ***polymorphic type***
 - abstract class does not have constructor as it does not have data to initialize
-- Objects are usually handled via base-class pointers 
 - that is common for abstract classes because they tend to be manipulated through references or pointers, and someone destroying a Container through a pointer has no idea what resources are owned by its implementation
 - A virtual destructor is essential for an abstract class because an object of a derived class is usually manipulated through the interface provided by its abstract base class. In particular, it may be deleted through a pointer to a base class. Then, the virtual function call mechanism ensures that the proper destructor is called. That destructor then implicitly invokes the destructors of its bases and members.
 - use of **override** is optional, but being explicit allows the catch mistake like typo in function name 
@@ -810,3 +812,66 @@
 - The compiler to convert the name of a virtual function into an index into a table of pointers to functions.
 -  Each class with virtual functions has its own vtbl identifying its virtual functions.
 - Its space overhead is one pointer in each object of a class with virtual functions plus one vtbl for each such class. - vptr location, vtable index
+
+### Benefits from Hierarchies
+- Interface Inheritance
+- Implementation Inheritance
+
+    > Objects are constructed "bottom up" (base first) by constructors and destroyed "top down" (derived first) by destructors.
+
+- if we want use a function which only provided by a particular derived class then we use ***dynamic_cast***
+    ```c++
+    Shape* ps{read_shape(cin)};
+    if(Smiley* p = dynamic_cast<Smiley*>(ps)) { //... does ps point to a smiley
+        // ....a smiley; use it
+    } else {
+        //... not a smiley
+    }
+    ```
+
+    > dynamic_cast use case - if we pass the object to system where it uses the base class interaface then when it return we need to recover to original derived class
+
+### Avoiding Resources Leaks
+- use a standard-library unique_ptr rather than a “naked pointer” when deletion is required:
+
+    ```c++
+    class Smiley : public Circle {
+        // ...
+    private:
+        vector<unique_ptr<Shape>> eyes; // usually two eyes
+        unique_ptr<Shape> mouth;
+    };
+
+    unique_ptr<Shape> read_shape(istream& is) // read shape descriptions from input stream is
+    {
+        // ... read shape header from is and find its Kind k ...
+
+        switch (k) {
+        case Kind::circle:
+            // ... read circle data {Point,int} into p and r ...
+            return unique_ptr<Shape>{new Circle{p,r}};          // §15.2.1
+        // ...
+    }
+
+    void user()
+    {
+        vector<unique_ptr<Shape>> v;
+
+        while (cin)
+            v.push_back(read_shape(cin));
+
+        draw_all(v);                            // call draw() for each element
+        rotate_all(v,45);                       // call rotate(45) for each element
+    } // all Shapes implicitly destroyed
+    ```
+ ### Advice
+ -  Prefer concrete classes over class hierarchies for performance-critical component
+ - Make a function a member only if it needs direct access to the representation of a class
+ - Use nonmember functions for symmetric operators
+ - Declare a member function that does not modify the state of its object const
+ - If a class is a container, give it an initializer-list constructor
+ - A class with a virtual function should have a virtual destructor
+ - Use override to make overriding explicit in large class hierarchies
+ - When designing a class hierarchy, distinguish between implementation inheritance and interface inheritance 
+ - Use dynamic_cast where class hierarchy navigation is unavoidable
+ - Use dynamic_cast to a pointer type when failure to find the required class is considered a valid alternative
