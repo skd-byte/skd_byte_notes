@@ -879,3 +879,29 @@
  - When designing a class hierarchy, distinguish between implementation inheritance and interface inheritance 
  - Use dynamic_cast where class hierarchy navigation is unavoidable
  - Use dynamic_cast to a pointer type when failure to find the required class is considered a valid alternative
+
+    ```c++
+    vector v;                           // object goes out of scope → destructor
+    ~vector();
+
+    vector a = b;                       // create new object from existing → copy constructor
+    vector(const vector&);
+
+    v = b;                              // overwrite existing object → copy assignment
+    vector& operator=(const vector&);
+
+    vector x = make_vector();           // create from temporary → move constructor
+    vector(vector&&);
+
+    v = std::move(x);                   // overwrite using temporary → move assignment
+    vector& operator=(vector&&);
+    ```
+- **lvalue**: An expression that refers to a named object with identity and stable storage (e.g., `v`, `*ptr`); you can take its address.
+- **prvalue**: An expression that produces a value without naming an object (e.g., `10`, `3+4`, `vector(10)`); since C++17 it doesn’t create a temporary—used directly for initialization (guaranteed elision).
+- **xvalue**: An “expiring” object with identity that is about to be moved from (e.g., `std::move(v)`).
+
+    > ***prvalue object example*** `vector v = vector(3);` What happens (C++17+): vector(3) is a prvalue, No temporary vector is created, v is constructed directly, Equivalent to:`vector v(3);`
+    ```c++
+    vector v = vector(3);   // prvalue → direct construction
+    vector u = make();      // prvalue return → guaranteed elision
+    ```
