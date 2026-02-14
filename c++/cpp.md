@@ -46,8 +46,8 @@
     - auto ch = 'x'; // a char
     - use in generic programming where the long type names and the exact type of an object can be hard for programmer to know
 
-> Parentheses () call the most specific matching constructor and allow implicit conversions, but they can be mistaken for function declarations.
-> Braces {} provide "Uniform Initialization" that prevents data loss and solves ambiguity, but they will always prioritize an initializer_list constructor if one is available.
+> ***Parentheses ()*** call the most specific matching constructor and allow implicit conversions, but they can be mistaken for function declarations.
+> ***Braces {}*** provide "Uniform Initialization" that prevents data loss and solves ambiguity, but they will always prioritize an initializer_list constructor if one is available.
 
 ### Scope and Initialization
 - Scope
@@ -436,7 +436,7 @@
     {
         if(i<0||i>=size())
         {
-            throw out_of_rangw{"Vector::operator[]"};
+            throw out_of_range{"Vector::operator[]"};
         }
         return elem[i];
     }
@@ -545,12 +545,12 @@
     - An immediate caller can reasonably be expected to handle the failure
 - We trhow an exception when
     - An error is so rare
-    - An error cannot be handled by an immediate caller. Instead the error has to percolate back to an ultimate caller. For ex, it is infeasible to have every function in an application reliably handle every a;;ocation failure or network outage.
+    - An error cannot be handled by an immediate caller. Instead the error has to percolate back to an ultimate caller. For ex, it is infeasible to have every function in an application reliably handle every allocation failure or network outage.
         > **Note:** The C++ runtime system unwinds the stack, skipping over all the functions in the call chain until it finds a catch block that is prepared to handle that type of exception.
     - Not suitable return path, ex constructor
     - The function that found the error was callback
     - An error implies that some "undo action" is needed
-    - The error has to be transmitted up a call chgain to an ultimate caller
+    - The error has to be transmitted up a call chain to an ultimate caller
 - We terminate when
     - An error cannot recover
     - non-trival error is detected
@@ -727,7 +727,7 @@
 
     > **Function defined in a class are inlined by default**
 - const specifier on the functions indicate that these function do not modify the object for which they are called.
-- const member function can be invojed for both const and non const objects, but for non const fuction can only be invoked for non const objects.
+- const member function can be invoked for both const and non const objects, but for non const fuction can only be invoked for non const objects.
     ```c++
     double real() const {return re;}
 
@@ -748,13 +748,15 @@
     1/a means operator/(complex{1},a)
     ```
 
-- operator chaining , Assignment (=) T&, Stream (<<, >>) ostream& / istream&, Prefix ++ T&, Postfix ++, T, Arithmetic (+, -), T (usually)
+- operator chaining , Assignment (=) T&, Stream (<<, >>) ostream& / istream&, Prefix ++ T&, Postfix ++ T, Arithmetic (+, -), T (usually)
     ```c++
     ostream& operator<<(ostream& os, const MyClass& obj) {
     os << obj.value;
     return os;   // 🔑 key
     }
     ```
+    > In C++, operator overloading is allowed only if at least one operand is a user-defined type (class, struct, or enum).
+    > (c1+=c2)+=c3 if return as value then Operation is performed on temp object, so the original object is unchanged.
     > user define operators use cautiously, syntax is fixed by language so you can't define a unary /.
 
     > Plain **delete** deletes and individual object, **delete[]** deletes an array.
@@ -766,6 +768,8 @@
     Model& handle = m;   // handle
     handle.value = 20;
     ```
+
+> Return by reference because array indexing yields an lvalue (the actual element). Returning by value would create a temporary, so `const double& r = v[0];` would bind to a temporary copy.
 
 #### intializing containers
 
