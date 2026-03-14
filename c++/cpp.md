@@ -1119,3 +1119,60 @@ program need to implement
 > RAII is integrated with exception handling because destructors automatically run during stack unwinding when an exception is thrown.
 
 ### Operator Overloading
+- Binary airthmetic: +, -, /, and %
+- binary logical: &, | and ^
+- binary relational: ==, !=, <, <=, >, >=, and <=>
+- logical: && and ||
+- unary airthemtic and logical: +, -, ~(bitwise complement), and !(logical negation)
+- Assignments: =, +=, *=, etc
+- Increments and decrements: ++ and --
+- Pointer operation: -> , unary * and unary &
+- applcation (call):()
+- subscripting:[]
+- comma: ,
+- shift: >> and <<
+    > we cannot define dot (.) to get smart references
+
+- An operator can be defined as a member fucntion: 
+	```c++
+	class Matrix{ 
+		Matrix& operator=(const Matrix& a) // assign m to *this; retrun a reference to *this
+	
+	}
+	```
+
+> this is conventioanally done for operators that modify their first operand and is for historical reason required for = -> () []
+> Define binary operators like == as free functions, so both operands are treated equally, since member functions make the left operand the implicit 'this' object.
+- spaceship operator <=> 0, negative and positive `auto operator<=>(const R2& a) const { return a.m == m ? 0 : a.m < m ? -1 : 1; }`
+> by defining the default <=> the other relational operators are implicitly defined If <=> is defined as non-default, == is not implicitly defined, but < and the other relational operators are.
+>  For multi-element types, <=> performs lexicographical comparison, but a separate == can be optimized for faster equality checks.
+
+### Container operations
+-  begin() and end() functions are also used by the implementation of the range-for, so we can simplify loops over a range
+- for const containers are called cbegin() and cend()
+
+### Input and output operations
+- for pairs of integers, << means left shift same for right, and for iostreams they are the output and input opeators
+
+### swap
+- implemented as a three move operation
+> If you design a type that is expensive to copy and could plausibly be swapped (e.g., by a sort function), then give it move operations or a swap() or both
+
+### hash<>
+- 
+
+### user defined literals
+	```c++
+		constexpr complex<double> operator""i(long double arg)   // imaginary literal
+		{	
+    			return {0,arg};
+		}	
+	```
+> 'complex<double> z = 2.7182818+6.283185i;' The real number is implicitly converted to complex(real,0), then complex addition adds real and imaginary parts separately.
+
+### Advice
+- define all essentials operations or none
+- By default, declare single-argument constructors explicit
+- For large operands, use const reference argument types; 
+-  If a class member has a reasonable default value, provide it as a data member initializer;
+-  Avoid explicit use of std::copy(); 
