@@ -1450,3 +1450,42 @@ program need to implement
 - Use template aliases to simplify notation and hide implementation details;
 - Use a lambda if you need a simple function object in one place only
 - Use function objects as arguments to algorithms;
+
+### Extra Info
+- Static data member: One shared copy across all objects, defined outside class with int Class::var = 0; (unless constexpr/inline). Accessed via Class::var.
+    - static constexpr int b = 10;	No memory needed — value is replaced at compile time (like a #define).
+    - static inline int c = 20;	inline tells the compiler: "if you see this in multiple files, just keep one copy."
+- Static member function: No this pointer, can only access static members, called via Class::func() — no object needed.
+
+    ```c++
+    class Foo {
+        static int a = 0;                  // ERROR — not allowed
+        static int b;                      // OK — declaration only, define outside
+        static const int c = 0;            // OK — const integral type
+        static constexpr int d = 0;        // OK — compile-time constant
+        static inline int e = 0;           // OK — C++17, inline handles deduplication
+    };
+    int Foo::b = 0;   // required for 'b'
+    ```
+- Permission
+    | Access      | Inside class | Derived class | Outside (main, other classes) |
+    |-------------|:---:|:---:|:---:|
+    | `public`    | Yes | Yes | Yes |
+    | `protected` | Yes | Yes | No  |
+    | `private`   | Yes | No  | No  |
+
+    | Inheritance mode | public members become | protected members become | private members   |
+    |------------------|:---------------------:|:------------------------:|:-----------------:|
+    | `: public`       | public                | protected                | not accessible    |
+    | `: protected`    | protected             | protected                | not accessible    |
+    | `: private`      | private               | private                  | not accessible    |
+
+- Friend function
+    - friend function: A non-member function (no this, called as func(obj)) granted access to a class's private/protected members; can be defined inside or outside the class — either way it's not a member.
+    - Primary use case: Operator overloading (e.g., operator<<, operator*) where the left operand isn't your class — member functions require your class on the left, friend doesn't.
+        ```c++
+        // cout is left operand (not Point), so operator<< can't be a member → use friend
+        friend ostream& operator<<(ostream& os, const Point& p) { return os << p.x << "," << p.y; }
+        ```
+    - friend class: Grants all functions of another class access to your private members.
+    - Friendship is one-way, not inherited, not transitive — use sparingly to preserve encapsulation.
