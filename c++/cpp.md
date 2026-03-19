@@ -6,7 +6,7 @@
 - Core Langauage Features: Char and Int
 - Standard Library Components: Vector and Map
 - C++ Statically Typed Language: Menas type of every entity(object, value, name and expression) must be known to the compiler at its point of use. the type of an object determine the set of operations applicable to it
-- Type of Function: Return Type and sequence of argument type 
+- Type of Function: Return Type and sequence of argument type
     - `Ex- double get(const vector<double>&vec, int index) // type: double(const vector<double&>, int)`
     - Function Can be member of class , then name of calss also part of the function type, `type: char&Tring::(int)`
 - Function overloading
@@ -30,17 +30,17 @@
 
 ### Initialization
 - ex
-    ```c++  
+    ```c++
     double d1 = 2.3;
     double d2 {2.3};
     double d3 = {2.3}; // the = is optional with {...}
     complex<double>z2 {d1,d2}
-    complex<double>z3 = {d1, d2} // the = is optional with {...} 
+    complex<double>z3 = {d1, d2} // the = is optional with {...}
     ```
 - {} this saves you from conversion that losse information
     - ex, int i1 = 7.8 // i becomes 7 (surprise?)
         - unfortunately, conveersion that loose information, ***narrowing conversions***, such as double to int and int to char are allowed and implitcly applied.
-    - ex, int i2{7.8} // error: floating-point to iteger conversion 
+    - ex, int i2{7.8} // error: floating-point to iteger conversion
 - Don"t need to state its type explicitly when it can be deduced from the initializer
     - auto b = true; // a bool
     - auto ch = 'x'; // a char
@@ -52,7 +52,7 @@
 ### Scope and Initialization
 - Scope
     - Local Scope - Declared in a function or lambda is called a local name.
-    - Class Scope- Class Member Name, outside of any function, lambda or enum class 
+    - Class Scope- Class Member Name, outside of any function, lambda or enum class
     - Namespace Scope - outside of any function, class, or enum class.
 - For a namespace object the point of destruction is the end of the program, For a member the point of destruction is determine by the point of destruction oth object of which it is a member
 
@@ -107,7 +107,7 @@
         {
             ++x;
             cout << x << '\n';
-        }   
+        }
     }
     ```
 - Declarator operators
@@ -119,7 +119,7 @@
     ```
 - Null Pointer
     ```c++
-    Link<Record>*Ist = nullptr; // pointer to a link to a Record 
+    Link<Record>*Ist = nullptr; // pointer to a link to a Record
     int x = nullptr; //error:nullptr id a ponter not an integer
     ```
 - reference cannot be made to refer to a different object after its initialization.
@@ -159,7 +159,7 @@
 - Initilization
     - Initialization differs from assignment. In general, for an assignment to work correctly, the assigned-to object must have a value. On the other hand, the task of initialization is to make an uninitialized piece of memory into a valid object
     - You can use = to initialize a reference but please don’t let that confuse you. `int& r = x;      // bind r to x (r refers to x)`This is still initialization and binds r to x, rather than any form of value copy.
-    > **Note:** The basic semantics of argument passing and function value return are that of initialization. 
+    > **Note:** The basic semantics of argument passing and function value return are that of initialization.
 
 - Ex
     - Initialization
@@ -180,7 +180,7 @@
 ### Introduction
 - The C++ abstraction mechanism are primarily designed to let programmers design and imp[lement their own type.
 - ***User-defined types (classes and enumeration)*** are less error prone and easy to use than built-in types
-- structure 
+- structure
     ```c++
     struct Vector
     {
@@ -213,7 +213,7 @@
         double& operator[](int i){return elem[i];} //element access: subscripting
         int size(){return sz;}
     private:
-        doouble* elem; // pointer the elemennts 
+        doouble* elem; // pointer the elemennts
         int sz // the number of elements
     }
 
@@ -222,7 +222,7 @@
         Vector v(6);
         for(int i=0; i<v.size(); ++i)
             cin >>v[i];
-        
+
         double sum = 0;
         for(int i=0; i<v.size(); ++i)
             sum +=v[i];
@@ -370,7 +370,7 @@
         {
             return false;
         }
-            
+
         for(int i = 0; i<v1.size(); ++i)
         {
             if(v1[i]!=v2[i])
@@ -396,12 +396,12 @@
         for (int i=0; i!=v.size(); ++i)
             sum+std::sqrt(v[i]);
         return sum;
-    } 
+    }
 
     ```
 - #include has many problems as follows
     - Compilation time: will be processed by the compiler in every trnsalation unit
-    - Order dependencies: If we #include header1.h before header2.h the declarations and macros in header1.h might affect the meaning of the code in header2.h. 
+    - Order dependencies: If we #include header1.h before header2.h the declarations and macros in header1.h might affect the meaning of the code in header2.h.
     - Transitivity: All code that is needed to express a declaration in a header file must be present in that header file. This leads to massive code bloat as header
 
 - module benfits
@@ -471,7 +471,7 @@
     - If all good intent and planning fails, so that `user()` still throws, `std::terminate()` is called to immediately terminate the program.
 
 #### Invariants
-- Use of exception to check a ***precondition***, like checking function argument and refusing to act. 
+- Use of exception to check a ***precondition***, like checking function argument and refusing to act.
 - example if we say "elem points to an array of sz doubles" but we only said that in a comment. Such  statement of what is asssumed to be true for a class is called a **class invariant**, or simply  a **invariant**.
 -  It is the job of a contructor to establish the invariant for its class(so that the memeber functions can rely on it) and for the member function to make sure that the invariant holds when they exit.
 
@@ -496,7 +496,7 @@
     void test()
     {
         try{
-            Vector v(-27);          
+            Vector v(-27);
         }
         catch(std::length_error& err){
             // handle negative size
@@ -530,7 +530,7 @@
         }
 
         // No try-catch block needed for cleanup!
-        read_data_from_stream(file); 
+        read_data_from_stream(file);
 
         // When the function returns or an exception is thrown,
         // 'file' goes out of scope, and its destructor is called automatically,
@@ -788,8 +788,8 @@
 
  - ***std::intializer_list*** define a intializer-list constructor is a std lib type known to the compiler: when we use a {}-list, such as {1,2,3,4} compiler will create an object of type initializer_list to give to the program, ex `Vector v = {1,2,3,4}`
 
- - A static_cast does not check the value it is converting; the programmer is trusted to use it correctly. 
- - Other casts are reinterpret_cast and bit_cast (§16.7) for treating an object as simply a sequence of bytes and const_cast for “casting away const.” 
+ - A static_cast does not check the value it is converting; the programmer is trusted to use it correctly.
+ - Other casts are reinterpret_cast and bit_cast (§16.7) for treating an object as simply a sequence of bytes and const_cast for “casting away const.”
 
 ### Abstract Types
 - an abstract type is a type that completely insulates a user from its implementation. to do that decouple the interface from its representation and give up the genuine local variables
@@ -808,7 +808,7 @@
 - abstract class does not have constructor as it does not have data to initialize
 - that is common for abstract classes because they tend to be manipulated through references or pointers, and someone destroying a Container through a pointer has no idea what resources are owned by its implementation
 - A virtual destructor is essential for an abstract class because an object of a derived class is usually manipulated through the interface provided by its abstract base class. In particular, it may be deleted through a pointer to a base class. Then, the virtual function call mechanism ensures that the proper destructor is called. That destructor then implicitly invokes the destructors of its bases and members.
-- use of **override** is optional, but being explicit allows the catch mistake like typo in function name 
+- use of **override** is optional, but being explicit allows the catch mistake like typo in function name
 
     > ***NOTE:*** members objects are constructed in the order they are declared in the class definition not the order they apperar in the constructor member initializer list
 
@@ -876,7 +876,7 @@
  - If a class is a container, give it an initializer-list constructor
  - A class with a virtual function should have a virtual destructor
  - Use override to make overriding explicit in large class hierarchies
- - When designing a class hierarchy, distinguish between implementation inheritance and interface inheritance 
+ - When designing a class hierarchy, distinguish between implementation inheritance and interface inheritance
  - Use dynamic_cast where class hierarchy navigation is unavoidable
  - Use dynamic_cast to a pointer type when failure to find the required class is considered a valid alternative
 
@@ -909,7 +909,7 @@
     ```c++
         int x = 10;
         int* a = &x;  // a points to x
-        int& p = *a; // p is now a reference to x   
+        int& p = *a; // p is now a reference to x
 
         void move_all(vector<unique_ptr<shape>>& v, Point x ){
             // std::unique_ptr cannot be copied to ensure unique ownership of a resource
@@ -928,6 +928,21 @@
             p->wink_eye();
         }
     ```
+> (expression).func() works only if expression returns a class object
+
+- Ex pointer and reference confusion
+    ```cpp
+    int x = 10;
+    int* a = &x;
+    ```
+
+    | Statement | Type of `p` | Binds to | Compiles? |
+    |---|---|---|---|
+    | `int& p = x;` | `int&` | the variable `x` | Yes |
+    | `int& p = *a;` | `int&` | the object pointed to by `a` (i.e. `x`) | Yes |
+    | `int*& p = a;` | `int*&` | the pointer variable `a` | Yes |
+    | `int& p = a;` | `int&` | **type mismatch** (`int&` vs `int*`) | **No** |
+
 
 ## Essential Operations
 program need to implement
@@ -1046,7 +1061,7 @@ program need to implement
 ### Copy and Move
 - When we design a class, we must always consider if and how an object might be copied. For simple concrete types, memberwise copy is often exactly the right semantics for copy. For some sophisticated concrete types, such as Vector, memberwise copy is not the right semantics for copy; for abstract types it almost never is.
 
-- rvalue and lvalue 
+- rvalue and lvalue
     ```c++
         x = y;        // OK (x is lvalue)
         x + y = 20;   // ERROR (x+y is rvalue)
@@ -1080,14 +1095,14 @@ program need to implement
         }
     ```
 
-    > RVO cannot happen in assignment because the object already exists and RVO only works during object construction. `A a = f();   // initialization` 
+    > RVO cannot happen in assignment because the object already exists and RVO only works during object construction. `A a = f();   // initialization`
     ```
     A a;
     a = f(); // move constructor work here
     ```
 
     > After a move, the moved-from object should be in a state that allows a destructor to be run. Typically, we also allow assignment to a moved-from object.  that is why we assigned null ptr if destructor call then is should not free the moved object memory
-    
+
     > NOTE: Imp Example below
     ```c++
         z = x;             // we get a copy (x might be used later in f())
@@ -1101,7 +1116,7 @@ program need to implement
         func(A(10));    // move
     ```
 
-- The standard-library function **move()** doesn’t actually move anything. Instead, it returns a reference to its argument from which we may move – an rvalue reference; it is a kind of cast 
+- The standard-library function **move()** doesn’t actually move anything. Instead, it returns a reference to its argument from which we may move – an rvalue reference; it is a kind of cast
     > A std::thread cannot be copied because two object cannot handle the same thread `my_threads.push_back(std::move(t)); // copy not allowed`, and a large std::vector should not be copied because it is expensive, so both are typically moved instead of copied.
 
 ### Resource Management
@@ -1133,11 +1148,11 @@ program need to implement
 - shift: >> and <<
     > we cannot define dot (.) to get smart references
 
-- An operator can be defined as a member fucntion: 
+- An operator can be defined as a member fucntion:
 	```c++
-	class Matrix{ 
+	class Matrix{
 		Matrix& operator=(const Matrix& a) // assign m to *this; retrun a reference to *this
-	
+
 	}
 	```
 
@@ -1159,20 +1174,279 @@ program need to implement
 > If you design a type that is expensive to copy and could plausibly be swapped (e.g., by a sort function), then give it move operations or a swap() or both
 
 ### hash<>
-- 
+-
 
 ### user defined literals
 	```c++
 		constexpr complex<double> operator""i(long double arg)   // imaginary literal
-		{	
+		{
     			return {0,arg};
-		}	
+		}
 	```
 > 'complex<double> z = 2.7182818+6.283185i;' The real number is implicitly converted to complex(real,0), then complex addition adds real and imaginary parts separately.
 
 ### Advice
 - define all essentials operations or none
 - By default, declare single-argument constructors explicit
-- For large operands, use const reference argument types; 
+- For large operands, use const reference argument types;
 -  If a class member has a reasonable default value, provide it as a data member initializer;
--  Avoid explicit use of std::copy(); 
+-  Avoid explicit use of std::copy();
+
+
+## Templates
+
+- template<class T> and template<typename T> both are same
+- for all types T
+- a template plus a set of template arguments is called an instantiation or a specialization. Late in the compilation process, code generated for each instanttiation
+
+### Constrained Template Arguments
+- template<Element T> for all types T such that T satisfies the Element Concept
+- for all T such that Element(T)”; that is, Element is a predicate that checks whether T has all the properties that a Vector requires
+- Element where “Element” specifies the requirements of a type that can be an element
+
+    > the code generated from templates is type checked at instantiation time late in compilation process that is why the error is often atrocious
+
+### Value Template Arguments
+
+- `template<typename T, int N>` ex want to create the arbitary sie buffers with static memory , T elem[N];
+   > Unfortunately, for obscure technical reasons, a string literal cannot yet be a template value argument
+	```c++
+	    template<char* s>
+	    void outs() { cout << s; }
+
+	    char arr[] = "Weird workaround!";
+
+	    void use()
+	   {
+	     outs<"straightforward use">();    // error (for now)
+	     outs<arr>();                      // writes: Weird workaround!
+	   }
+	```
+### Template Argument Deduction
+- `pair<int, double> p = {1, 5.2};` and can be written like this it deduced from initializer`pair p = {1, 5.2};`
+    ```c++
+	template<typename T>
+	class Vector {
+	public:
+     		Vector(initializer_list<T>);    // initializer-list constructor
+
+     		template<typename Iter>
+         	Vector(Iter b, Iter e);     // [b:e) iterator-pair constructor
+
+     		struct iterator { using value_type = T; /* ... */ };
+     		iterator begin();
+
+     	// ...
+	};
+	Vector vs1 {"Hello", "World"};          // OK:  "Hello" → type is const char[6] → decays to const char*
+	Vector vs2 {"Hello"s, "World"s};        // OK: deduces to Vector<string>
+	Vector v1 {1, 2, 3, 4, 5};                // element type is int
+	Vector v2(v1.begin(),v1.begin()+2);       // a pair of iterators or a pair of values (of type iterator)?
+	Vector v3(9,17);     // error: ambiguous
+    ```
+    > we need a way of saying "a pair of values of the same type should be consider iterators." Adding a ***deduction guide*** after the declaration of vector does exactly that:
+    ```c++
+	template<typename Iter>
+	   vector(Iter, Iter) -> vector<typename Iter::value_type>
+     ```
+	> they are iterators, and create a Vector of the type those iterators point to.
+     ```c++
+	Vector v1 {1, 2, 3, 4, 5};          // element type is int
+	Vector v2(v1.begin(),v1.begin()+2);       // pair-of-iterators: element type is int
+	Vector v3 {v1.begin(),v1.begin()+2};      // element type is Vector2::iterator
+     ```
+	> so v3 is a vector of iterators: `Vector<Vector<int>::iterator>`
+
+### Parameterized Operations
+-  three ways to parameterized the operations by values or types
+    - A function template
+    - A function object: an object that can carry data and be called like a function
+    - A lambda expression: a shorthand notation for a function object
+
+#### A function template
+- Ex
+    ```c++
+    template<typename Sequence, typename Value>
+    Value sum(const Sequence& s, Value v)
+    //....
+    double dd = sum(ld,0.0);               // the sum of a list of doubles
+    ```
+- Note how the types of the template arguments for sum<Sequence,Value> are deduced from the function arguments. Fortunately, we do not need to explicitly specify those types.
+
+    > A function template can be a member function, but not a virtual member. compiler would not know all instantiations of such a template in a program, so it could not generate a vtbl
+
+#### A function Objects (functor)
+
+- We can call such an object, just as we call a function:
+- implement using the `operator()`
+    ```c++
+    template<typename C, typename P>
+    int count(const C& c, P pred)   // assume that C is a container and P is a predicate on its elements
+    {
+        int cnt = 0;
+        for (const auto& x : c)
+            if (pred(x))
+                    ++cnt;
+        return cnt;
+    }
+    //...
+    bool operator()(const T& x) const { return x<val; } // call operator
+    Less_than lti {42};               // lti(i) will compare i to 42 using < (i<42)
+    Less_than lts {"Backus"s};        // lts(s) will compare s to "Backus" using < (s<"Backus")
+
+    //..
+    bool b1 = lti(n);   // true if n<42
+    cout << "number of values less than " << x << ": " << count(vec,Less_than{x}) << '\n';
+    cout << "number of values less than " << s << ": " << count(lst,Less_than{s}) << '\n';
+    ```
+    > The beauty of function objects is that they carry the value to be compared against with them. The ability to carry data plus their efficiency makes function objects particularly useful as arguments to algorithms. 
+- Function objects used to specify the meaning of key operations of a general algorithm (such as Less_than for count()) are sometimes referred to as ***policy objects.****
+
+#### Lambda Expresssion
+ - [capture](parameters){ body }
+ - there is a notation for implicitly generating function objects (A lambda is C++'s shorthand for implicitly generating a function object (also called a functor).)
+    ```c++
+    void f(const vector<int>& vec, const list<string>& lst, int x, const string& s)
+    {
+        cout << "number of values less than " << x
+            << ": " << count_if(vec.begin(), vec.end(), [&](int a){ return a < x; })
+            << '\n';
+        cout << "number of values less than " << s
+            << ": " << count_if(lst.begin(), lst.end(), [&](const string& a){ return a < s; })
+            << '\n';
+    }
+    ```
+- “capture” only x, we could have said so: [&x]. Had we wanted to give the generated object a copy of x, we could have said so: [x]. Capture nothing is [ ], capture all local names used by reference is [&], and capture all local names used by value is [=].
+- when lamnda use in member function
+    - [this] inside a member function captures the object pointer — lets the lambda access all class members, but unsafe if the object is destroyed before the lambda runs.
+    - [*this] captures a full copy of the object — safe even if the original is destroyed; prefer this when the lambda might outlive the object.
+    - [i, this] explicitly lists individual captures — only grabs what's needed, avoids accidental captures, and lets you mix modes (e.g., i by value, this by pointer).
+
+##### Lamdas as function arguments
+
+-  I prefer to name the operation so as to more clearly state its purpose and to make it available for use in several places in a program.
+- `for_each(v,[](unique_ptr<Shape>& ps){ ps->rotate(45); }); `
+> unique_ptr<Shape>s to the lambdas by reference. That way for_each() doesn’t have to deal with lifetime issues
+-  lambda with an auto parameter a template, a generic lambda
+    ```c++
+    template<class S>
+    void rotate_and_draw(vector<S>& v, int r)
+    {
+        for_each(v,[](auto& s){ s->rotate(r); s->draw(); });
+    }
+    // When needed, we can constrain the parameter with a concept (§8.2). For example, we could define Pointer_to_class to require * and -> 
+    for_each(v,[](Pointer_to_class auto& s){ s->rotate(r); s->draw(); });
+    // ...
+    rotate_and_draw(v1,45);
+    rotate_and_draw(v2,90);
+    ```
+    > For even tighter checking, we could define a Pointer_to_Shape concept specifying the properties we want for a type to be useable as a shape. That would allow us to use shapes that weren’t derived from class Shape
+
+##### Lambdas for initialization
+- Ex `const int x = [&]() { return 42; }();`
+- Ex `const auto v = [&]() { return (x > 0) ? vector<int>(x) : vector<int>{1,2,3}; }();`
+
+##### Finally
+- if we need to do some cleanup that is not associated with a single object, or with an object that does not have a destructor (e.g., because it is a type shared with a C program)? We can define a function, finally() that takes an action to be executed on the exit from the scope
+    ```c++
+    void old_style(int n)
+    {
+        void* p = malloc(n*sizeof(int));       // C-style
+        auto act = finally([&]{free(p);});     // call the lambda upon scope exit
+        // ...
+    }    // p is implicitly freed upon scope exit
+    ```
+    ```c++
+    template <class F>
+    [[nodiscard]] auto finally(F f)
+    {
+        return Final_action{f};
+    }
+    template <class F>
+    struct Final_action {
+        explicit Final_action(F f) :act(f) {}
+        ~Final_action() { act(); }
+        F act;
+    };
+    ```
+
+    > I used the attribute [[nodiscard]] to ensure that users do not forget to copy a generated Final_action into the scope for which its action is intended
+
+    > The compiler looks at the argument — it is a lambda. Every lambda has a unique unnamed type generated by the compiler (something like __lambda_42). So the compiler deduces: `F = __lambda_42   (the compiler's internal name for your lambda)'
+
+### Template Mechanisms
+
+#### Variable Templates
+- Ex
+    ```c++
+    template <class T>
+        constexpr T viscosity = 0.4;
+
+    template <class T>
+        constexpr space_vector<T> external_acceleration = { T{}, T{-9.8}, T{} };
+
+    auto vis2 = 2*viscosity<double>;
+    auto acc = external_acceleration<float>;
+
+    //...
+
+    template<typename T, typename T2>
+    constexpr bool Assignable = is_assignable<T&,T2>::value;  // is_assignable is a type trait (§16.4.1)
+
+    template<typename T>
+    void testing()
+    {
+        static_assert(Assignable<T&,double>, "can't assign a double to a T");
+        static_assert(Assignable<T&,string>, "can't assign a string to a T");
+    }
+    ```
+#### Aliases
+- it is useful to introduce a synonym for a type or a template
+- `using size_t = unsigned int;`
+- In fact, every standard-library container provides value_type as the name for the type of its elements 
+    ```c++
+    template<typename C>
+    using Value_type = C::value_type;     // the type of C's elements
+
+    template<typename Container>
+    void algo(Container& c)
+    {
+        Vector<Value_type<Container>> vec;       // keep results here
+        // ...
+    }
+    ```
+- The aliasing mechanism can be used to define a new template by binding some or all template arguments.
+    ``` c++
+    template<typename Key, typename Value>
+    class Map {
+        // ...
+    };
+
+    template<typename Value>
+    using String_map = Map<string,Value>;
+
+    String_map<int> m;     // m is a Map<string,int>
+    ```
+
+#### Compile-Time if
+
+- if constexpr evaluates the condition at compile time. The branch that's false is discarded — it doesn't even need to compile.
+
+    ``` c++
+    template<typename T>
+    string to_str(T val) {
+        if constexpr (is_arithmetic_v<T>)
+            return to_string(val);          // only compiled for int, double, etc.
+        else
+            return val;                     // only compiled for string-like types
+    }
+    // Usage:
+    to_str(42);          // T=int    → is_arithmetic=true  → to_string(42)  → "42"
+    to_str("hello");     // T=const char* → is_arithmetic=false → returns "hello"
+    ```
+### Advice
+- Templates are type safe, but for unconstrained templates checking happens too late
+- Let constructors or function templates deduce class template argument types;
+- Use template aliases to simplify notation and hide implementation details;
+- Use a lambda if you need a simple function object in one place only
+- Use function objects as arguments to algorithms;
