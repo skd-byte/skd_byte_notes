@@ -323,18 +323,7 @@
 
 ### Separate compilation
 - A .cpp file that is compiled by itself is called a **translation unit**.
-
-    ```plantuml
-    @startuml
-
-    rectangle "Vector.h Interface" as VectorInterface
-    rectangle "Vector.cpp \n #include "Vector.h"" as VectorImplementation
-    rectangle "user.cpp \n #include "Vector.h"" as UserCode
-
-    UserCode -up-> VectorInterface
-    VectorImplementation -up-> VectorInterface
-
-    @enduml
+![separate compilation](./images/image_1.png)
     ```
 ### Modules (C++20)
 

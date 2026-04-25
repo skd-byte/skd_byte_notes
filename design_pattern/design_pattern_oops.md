@@ -136,26 +136,9 @@
 
 ### Use Case Diagram
 
-***EX- space Microwave***
-```plantuml
-@startuml
-left to right direction
+- ***EX- space Microwave***
 
-actor Astronaut as A
-actor Nutritionist as N
-
-rectangle System {
-  ("Heat Meal") as HeatMeal
-  ("Generate Reports") as GenerateReports
-  ("Change Setting") as ChangeSetting
-}
-
-A -- HeatMeal
-A -- GenerateReports
-N -- GenerateReports
-N -- ChangeSetting
-@enduml
-```
+![space_microwave_diagram](./images/img_1.png)
 
 ### User Stories
 
@@ -176,32 +159,9 @@ N -- ChangeSetting
 * Represents important objects and the relationships between them (not software objects)
 * To identify objects we will go through all of our use cases and user stories and any other written requirement to pick all of the ***noun***
 *  Once the object identify add relationship between them by drawing the line
-* Ex- Starship Game- Diagram 
+* Ex- Starship Game- Diagram
 
-```plantuml
-@startuml
-
-left to right direction
-rectangle "Player" as Player
-rectangle "Asteroid" as Asteroid
-rectangle "Direction" as Direction
-rectangle "Area" as Area
-rectangle "Spaceship" as Spaceship
-rectangle "Missile" as Missile
-rectangle "Path" as Path
-
-
-' Relationships
-Player -- Asteroid : steers
-Area -- Asteroid
-Area -- Missile
-Missile -- Path : follow
-Missile -- Spaceship : Fires
-Spaceship -- Direction
-Asteroid -- Direction
-Area "1" -- "1..*" Spaceship : contains
-@enduml
-```
+![starship game](./images/img_2.png)
 
 ### Identifying Responsibilities
 * Look for verb (***Class - behaviours***) phrases in use case, user story or in requirement to identify responsibilities
@@ -216,7 +176,7 @@ Area "1" -- "1..*" Spaceship : contains
 * Not write method name as responsibilites,as it is not required at this stage
 * Use physical Cards, more handy
   
-  ![CRC Cards Template](CRC_Table_Template_001.png) ![CRC Cards Template](CRC_Table_Ex_002.png)
+  ![CRC Cards Template](./images/CRC_Table_Template_001.png) ![CRC Cards Template](./images/CRC_Table_Ex_002.png)
 
 > ***Note:*** Either create CRC Card or Conceptual Diagram, CRC cards has same information of coneptual diagram
 
@@ -225,21 +185,8 @@ Area "1" -- "1..*" Spaceship : contains
 
 ### Uml Class Diagram - Ex
 
-```plantuml
-  @startuml
-  Class Spaceship {
-    - callSign:String = "Excelsior"
-    - shieldActive: Boolean
-    - shieldStrength: Integer
-    - position: Coordinate
-    + getShieldStrength():Integer
-    + reduceShield(Integer)
-    + getposition(): Coordinate
-    + move(Direction)
-    - setPosition(coordinate)
-  }
-  @enduml
-```
+![uml class diagram](./images/img_3.png)
+
 
 * Static Variable
   * Variable that is shared across all objects in a class
@@ -247,80 +194,13 @@ Area "1" -- "1..*" Spaceship : contains
 
 #### Ex- Juke Box Music Player
 
-+ ***Conceptual Model Diagram***
-```plantuml
-@startuml
+- ***Conceptual Model Diagram***
 
-
-rectangle "Admin" as Admin
-rectangle "User" as User
-rectangle "Library\nDisplays Album\nSelect Album" as Library
-rectangle "Queue\nAdd Song\nGet Next Song \nRemove Song \nIdentify User" as Queue
-rectangle "Song\nPlay" as Song
-rectangle "Album\nDisplays Songs\nSelect Songs" as Album
-
-
-' Relationships
-Admin -down- Queue : moderates
-User -down- Song
-User -down- Queue : gets ID
-User -down- Album : browses
-Library "1"-down-"1..*" Album : contains
-Queue "1"-right- "0..*" Song: contains
-Song "1..*"-right- "1" Album: contains
-@enduml
-```
+![uml class diagram](./images/img_4.png)
 
 + ***Class Diagram***
-```plantuml
-@startuml
 
-Class Admin {
-  - id:String
-  + getId():String
-  +createUser()
-  + manageQueue()
-}
-
-
-Class User {
-  - id:String
-  + getId():String
-}
-
-
-Class Library {
-  - titles:String[1..*]
-  - albums:Albums[1..*]
-  + getTitles():Strings[1..*]
-  + getAlbum(String):Album
-}
-
-Class Queue {
-  - playlist:Songs[0..*]
-  + addSong(Song, UserID)
-  + getNextSong():Song
-  + removeSong(Song)
-}
-
-Class Song {
-  - titles:String
-  - artist:String
-  + getTitles():Strings
-  + getArtist():String
-  + play()
-}
-
-Class Album {
-  - titles:String[1..*]
-  - songs:Songs[1..*]
-  + getTitles():Strings[1..*]
-  + getSong(String):Song
-}
-
-@enduml
-```
-
+![uml class diagram](./images/img_5.png)
 
 ## Inheritance and Composition
 
@@ -329,47 +209,7 @@ Class Album {
   * A cargoShuttle is a Spaceship
   * A StarFighter is a Spaceship
 
-
-```plantuml
-@startuml
-' Define base class
-Class SpaceShip {
-  sheildActive
-  shieldStrength
-  position
-  setSheild()
-  move()
-}
-
-' Define derived class
-Class StarFighter {
-  [Everything From Spaceship]
-  fireMissile()
-}
-
-Class CargoShuttle {
-  [Everything From Spaceship]
-  cargo
-  dropCargo()
-}
-
-Class WarpCruiser {
-  [Everything From Spaceship]
-  move()
-}
-
-' Inheritance relationships
-SpaceShip <|-- StarFighter
-SpaceShip <|-- CargoShuttle
-SpaceShip <|-- WarpCruiser
-
-
-note top of WarpCruiser
-  "Overriding Move"
-end note
-
-@enduml
-```
+![uml class diagram](./images/img_6.png)
 
 ### Abstract Class
   * Exists for other classes to inherit
@@ -386,54 +226,15 @@ end note
 >
 > "***saying:*** Program to an Interface, not to an implementation."
 
-```plantuml
-@startuml
-
-' Define interfaces
-interface Movable <<interface>>  {
-    move()
-}
-
-Class SpaceShip {
-    setsheild()
-    move()
-}
-
-Class Asteroid {
-    detectCollision()
-    move()
-}
-
-Class CargoShuttle {
-    dropCargo()
-    move()
-}
-
-SpaceShip <|-- CargoShuttle
-SpaceShip .up.|> Movable
-Asteroid .up.|> Movable
-@enduml
-```
+![uml class diagram](./images/img_7.png)
 
 ### Aggregation
   * Aggregation Describes a ***"Has a or has many or uses a or uses many"*** Relationship
   * Ex-Fleet has many spaceship
 
-```plantuml
-@startuml
+![uml class diagram](./images/img_8.png)
 
-class Fleet {
-  ...
-}
 
-class Spaceship {
-  ...
-}
-
-Fleet "1" o-- "0..*" Spaceship
-
-@enduml
-```
 > **Aggregation:** A class contains a reference or pointer to another class, but does not own it. The contained object exists independently.
 > **Composition:** A class contains another class and owns it. The contained object is tied to the container’s lifecycle.
 
@@ -441,85 +242,12 @@ Fleet "1" o-- "0..*" Spaceship
   * Composition Implies Ownership
   * Ex- A spaceship **owns an** Engine
 
-```plantuml
-@startuml
+![uml class diagram](./images/img_9.png)
 
-class Engine {
-  ...
-}
-
-class Weapon {
-  ...
-}
-
-class Schield {
-  ...
-}
-
-class Spaceship {
-  ...
-}
-
-' Aggregation relationship (Library contains Book objects)
-Spaceship "1"*--"1..*" Engine
-Spaceship "1"*--"0..*" Schield
-Spaceship *-- Weapon
-
-@enduml
-```
 ### Ex- Juke Box - Class Relationship Diagram
 + ***Class Diagram***
-```plantuml
-@startuml
 
-Class Admin {
-  +createUser(String)
-  + manageQueue()
-}
-
-
-Class User {
-  - id:String
-  + getId():String
-}
-
-
-Class Library {
-  - titles:String[1..*]
-  - albums:Albums[1..*]
-  + getTitles():Strings[1..*]
-  + getAlbum(String):Album
-}
-
-Class Queue {
-  - playlist:Songs[0..*]
-  + addSong(Song, UserID)
-  + getNextSong():Song
-  + removeSong(Song)
-}
-
-Class Song {
-  - titles:String
-  - artist:String
-  + getTitles():Strings
-  + getArtist():String
-  + play()
-}
-
-Class Album {
-  - titles:String[1..*]
-  - songs:Songs[1..*]
-  + getTitles():Strings[1..*]
-  + getSong(String):Song
-}
-
-User <|-- Admin
-Queue o.."0..*" Song
-Song "1..*".right.o Album
-Album "1..*".up.o Library
-
-@enduml
-```
+![uml class diagram](./images/img_10.png)
 
 ## Software Development
 

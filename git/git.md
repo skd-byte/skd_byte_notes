@@ -54,7 +54,7 @@
 - Remotes are basically pointers to branches in other people's copies of the same repository.
 - When you clone a repository, Git automatically adds a remote named origin, and the branch you initially check out (usually main or master) is set to track the corresponding remote branch (e.g., origin/main) by default.
 - Create a new tracking branch from a remote branch `git checkout -b main origin/main` Creates main and sets it to track origin/main.
-
+- `git remote -v`: list all remote connections your local repo knows about
 #### Use cases
 - You're working on the dev branch. Another developer (Emma) has a fix in her repository. You want to test it safely before merging.
 - Add Remote & Fetch
