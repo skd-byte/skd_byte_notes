@@ -48,6 +48,9 @@
 
 > ***Parentheses ()*** call the most specific matching constructor and allow implicit conversions, but they can be mistaken for function declarations.
 > ***Braces {}*** provide "Uniform Initialization" that prevents data loss and solves ambiguity, but they will always prioritize an initializer_list constructor if one is available.
+    - std::vector<int> a(3, 5);  // 3 elements, all 5  ,[5, 5, 5]
+    - std::vector<int> b{3, 5};  // list of 3 and 5   ,[3, 5]
+    - Use `()` when you want to call a specific constructor directly, bypassing the `initializer_list` constructor that `{}` always prioritizes.
 
 ### Scope and Initialization
 - Scope
@@ -80,7 +83,7 @@
             ```
         - contexpr function can be used for non constant argument, so we can use the same funcntion for constexpr and for variables, without defining two.
         > **Note:** c++20, consteval introduce, if we want only be evaluated at compile time then define with **consteval**
-        - contexpr or consteval functions cannot modify non-local variables, but it can have loop[s and use its own local variable
+        - contexpr or consteval functions cannot modify non-local variables, but it can have loops and use its own local variable
 
 ### Pointers, Array and Refernces
 
@@ -124,6 +127,12 @@
     ```
 - reference cannot be made to refer to a different object after its initialization.
 - There is no “null reference.” A reference must refer to a valid object (and implementations assume that it does). There are obscure and clever ways to violate that rule; don’t do that.
+> example of obscure way to refer a invalid object
+    ```c++
+        int* p = nullptr;
+        int& r = *p;  // compiles fine, but runtime error
+    ```
+
 
 ### Tests
 
