@@ -28,21 +28,21 @@
 - two instruction deocde each cycle and issued
 - logically independednt instruction execute simulatneously
 - Also can be execute out of order, menas execute earlier than previous instruction completion
-```
-ADD r1, r2, r3 // both can execute simultaneously
-ADD r4, r5, r6 //
-DIV r1, r4
-MUL r7, r0, r8 // this can execute out order means before the div
-```
+    ```
+    ADD r1, r2, r3 // both can execute simultaneously
+    ADD r4, r5, r6 //
+    DIV r1, r4
+    MUL r7, r0, r8 // this can execute out order means before the div
+    ```
 
 ### Speculative Execution
-- Instructioon required data acces in some branch path procesosor will read the memory speculatively and throw away the result which is not required
->
-> Branch Prediction    "I think we go left"
-> Speculative Fetch    "Start reading instructions from the left path"
-> Speculative Read     "Also start loading data we might need on that path"
-> Branch Resolves     "Were we right?"  commit or flush
->
+- If an instruction in a speculatively executed branch path requires data from memory, the processor may issue that memory read speculatively — and if the branch is later resolved as not taken, the fetched data is simply discarded.
+    >
+    > - Branch Prediction    "I think we go left"
+    > - Speculative Fetch    "Start reading instructions from the left path"
+    > - Speculative Read     "Also start loading data we might need on that path"
+    > - Branch Resolves     "Were we right?"  commit or flush
+    >
 
 
 start using some isntruction  befor the result of earlier instruction
