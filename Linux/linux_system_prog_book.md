@@ -168,3 +168,34 @@ if (pid == 0) {
 - seeking end of file, padded with zeros, called sparse files, means it has holes
 - unseekable objects: pipes, fifo and socket etc
 
+### positional read and write
+- pread and pwrite, extra input with position
+
+### truncate
+- truncate and ftruncate, two function can aslo use to truncate to larger file size like lseek with padded zeros
+
+### Multiplexed IO
+- can wait on multiple IO file descriptor and unblock on any one of them available to read and write
+- poll, select, pselect, ppoll, epoll
+
+### Kernel Internals
+- It implements IO using three subsystems
+    - vfs
+    - the page cache
+    - page writeback
+
+#### VFS
+- virtual file system: also called virtual file switch, provided a mechnism to linux kernel to call any functions and manipulate its data  without knowing its filesystem type.
+- VFS are enormous. A single system call can read from any filesystem on any medium; a single utility can copy from any one filesystem to any other.
+- once user space call the c library function then it trapped to kernel then kernel will decide the backed object from the descriptor that backed object will call the corresponding filesystem function
+
+#### Page Cache (read buffer)
+- read slow on disk
+- temporal locality - keep in memory for future reference again
+- a sequential locality - readahead
+
+#### page writeback (write buffer)
+- wrtie always use write buffer, writebacks handled by gang of kerenl threads
+> earlier linux implementation both page cache and page write back were different buffers, now they are unified
+
+## Chapter 3: Buffered IO
