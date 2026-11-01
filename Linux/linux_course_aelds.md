@@ -164,7 +164,7 @@
 > sysroot/lib conatains library files specific to the toolchain which will be installed on the target (in the case aarch64) even when built on a different architecture
 
 - other tools in the toolchain
-  - aarch64-none-linux-gnu-xxxx)
+  - aarch64-none-linux-gnu-xxxx
   - gcc, g++ - compiler
   - gdb -debugger
   - ld-linker
@@ -195,3 +195,5 @@
     - handles log message from applications using syslog() API calls
 - API - openlong and syslog
 - log redirection in an ubuntu vm happens based on rules in `/etc/rsyslog.d/*default.conf`
+
+:wq
